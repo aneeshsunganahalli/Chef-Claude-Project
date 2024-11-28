@@ -15,6 +15,7 @@
 }
 main{
   padding: 30px 30px 10px;
+  font-family: Inter,sans-serif;
 }
 .add-ingredient-form{
   display: flex;
@@ -47,3 +48,4 @@ main{
   content: "+";
   margin-right: 5px;
 }
+
