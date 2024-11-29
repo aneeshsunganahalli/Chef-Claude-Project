@@ -12,11 +12,11 @@ const ingredientsListItems = ingredients.map(ingredient => (
   const formElement = event.currentTarget
   const formData = new FormData(formElement)
   const newIngredient = formData.get("ingredient")
+  if(newIngredient !== ""){
   setIngredients(prevIngredients => [...prevIngredients,newIngredient])
+  }
   formElement.reset()
  }
-    
-  
 
   return(
     <main>
@@ -29,9 +29,21 @@ const ingredientsListItems = ingredients.map(ingredient => (
           Add ingredient
         </button>
       </form>
-      <ul>
-        {ingredientsListItems}
-      </ul>
+
+      <section>
+        <h2>Ingredients on hand:</h2>
+        <ul className="ingredients-list">{ingredientsListItems}</ul>
+        <div className="get-recipe-container">
+          <div>
+            <h3>Ready for a recipe!</h3>
+            <p>Generate a recipe from your list of ingredients.</p>
+          </div>
+          <button>Get a recipe</button>
+        </div>
+      </section>
+      
     </main>
   )
 }
+
+
