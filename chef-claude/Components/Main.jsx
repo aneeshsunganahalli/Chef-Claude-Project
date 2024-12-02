@@ -1,19 +1,17 @@
 import React from "react"
 import IngredientsList from "./IngredientsList";
 import ClaudeRecipe from "./ClaudeRecipe";
-
+import { getRecipeFromMistral } from "../src/huggingFaceAPI";
 
 export default function Main() {
 
   const [ingredients, setIngredients] = React.useState([])
-  const [recipeShown, setRecipeShown] = React.useState(false)
+  const [recipe, setRecipe] = React.useState("")
  
   async function getRecipe(){
     const recipeMarkdown = await getRecipeFromMistral(ingredients)
-  }
-
-  function toggle(){
-    setRecipeShown(prevShown => !prevShown)
+    setRecipe(recipeMarkdown)
+    console.log(recipeMarkdown)
   }
 
   function addIngredient(event){
@@ -42,11 +40,11 @@ export default function Main() {
       </form>
  
       {ingredients.length > 0 && <IngredientsList 
-        getRecipe={toggle}
+        getRecipe={getRecipe}
         ingredients={ingredients}
       />}
 
-        {recipeShown && <ClaudeRecipe/>}
+        {recipe && <ClaudeRecipe recipe={recipe}/>}
     </main>
   )
 }
