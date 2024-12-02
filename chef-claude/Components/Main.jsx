@@ -1,23 +1,34 @@
 import React from "react"
+import IngredientsList from "./IngredientsList";
+import ClaudeRecipe from "./ClaudeRecipe";
+
 
 export default function Main() {
-const [ingredients, setIngredients] = React.useState([])
 
-const ingredientsListItems = ingredients.map(ingredient => (
-  <li key={ingredient}>{ingredient}</li>
-))
-
- function addIngredient(event){
-  event.preventDefault();
-  const formElement = event.currentTarget
-  const formData = new FormData(formElement)
-  const newIngredient = formData.get("ingredient")
-  if(newIngredient !== ""){
-  setIngredients(prevIngredients => [...prevIngredients,newIngredient])
+  const [ingredients, setIngredients] = React.useState([])
+  const [recipeShown, setRecipeShown] = React.useState(false)
+ 
+  async function getRecipe(){
+    const recipeMarkdown = await getRecipeFromMistral(ingredients)
   }
-  formElement.reset()
- }
 
+  function toggle(){
+    setRecipeShown(prevShown => !prevShown)
+  }
+
+  function addIngredient(event){
+    event.preventDefault();
+    const formElement = event.currentTarget
+    const formData = new FormData(formElement)
+    const newIngredient = formData.get("ingredient")
+    if(newIngredient !== ""){
+    setIngredients(prevIngredients => [...prevIngredients,newIngredient])
+    }
+    formElement.reset()
+  }
+
+
+ 
   return(
     <main>
       <form onSubmit={addIngredient} className="add-ingredient-form">
@@ -29,19 +40,13 @@ const ingredientsListItems = ingredients.map(ingredient => (
           Add ingredient
         </button>
       </form>
+ 
+      {ingredients.length > 0 && <IngredientsList 
+        getRecipe={toggle}
+        ingredients={ingredients}
+      />}
 
-      <section>
-        <h2>Ingredients on hand:</h2>
-        <ul className="ingredients-list">{ingredientsListItems}</ul>
-        <div className="get-recipe-container">
-          <div>
-            <h3>Ready for a recipe!</h3>
-            <p>Generate a recipe from your list of ingredients.</p>
-          </div>
-          <button>Get a recipe</button>
-        </div>
-      </section>
-      
+        {recipeShown && <ClaudeRecipe/>}
     </main>
   )
 }
